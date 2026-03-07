@@ -1,0 +1,12 @@
+plugins {
+    id 'application'
+}
+
+application {
+    mainClass = "org.maxim.example.Main"
+}
+
+dependencies {
+    // This tells Gradle: "Go find the project at :lib:quest-core and include it"
+    implementation project(':lib:quest-core')
+}
