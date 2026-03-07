@@ -84,7 +84,7 @@ public class PlayQuestCompleter implements Completer {
 
     private JsonObject makeRequest(String endpoint, Snowflake applicationId) {
         Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", false);
+        body.put("terminal", false);
         body.put("application_id", applicationId.toLong());
 
         return this.session.post(endpoint, body);
