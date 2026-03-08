@@ -1,34 +1,4 @@
 # Created by https://gitignore.org
-# Gradle.gitignore
-
-*.class
-.gradle
-**/build/
-**/src/**/build/
-out/
-.idea/
-.vscode/
-app/build
-
-# Ignore Gradle GUI config
-gradle-app.setting
-
-# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!gradle-wrapper.jar
-
-# Avoid ignore Gradle wrappper properties
-!gradle-wrapper.properties
-
-# Cache of project
-.gradletasknamecache
-
-# Eclipse Gradle plugin generated files
-# Eclipse Core
-.project
-# JDT-specific (Eclipse Java Development Tools)
-.classpath
-
-# Created by https://gitignore.org
 # Java.gitignore
 
 # Compiled class file
@@ -55,6 +25,35 @@ gradle-app.setting
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# Created by https://gitignore.org
+# Gradle.gitignore
+*.class
+.gradle
+**/build/
+**/src/**/build/
+out/
+.idea/
+.vscode/
+app/build
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Avoid ignore Gradle wrappper properties
+!gradle-wrapper.properties
+
+# Cache of project
+.gradletasknamecache
+
+# Eclipse Gradle plugin generated files
+# Eclipse Core
+.project
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
 
 # Dont' track
 dont-track/
