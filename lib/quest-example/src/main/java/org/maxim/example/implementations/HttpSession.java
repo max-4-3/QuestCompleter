@@ -5,8 +5,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +34,6 @@ public class HttpSession implements Session {
 
             HttpResponse<String> resp = client.send(req, HttpResponse.BodyHandlers.ofString());
             String response = resp.body();
-
-            Files.write(Paths.get(path.replace('/', '-')), response.getBytes());
 
             return JacksonJson.parse(response);
 

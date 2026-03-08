@@ -3,19 +3,25 @@ package org.maxim.example;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Base64.Encoder;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
+import org.maxim.core.completer.Completer;
+import org.maxim.core.helper.RandomHelper;
 import org.maxim.core.helper.SleepHelper;
 import org.maxim.core.helper.StringHelper;
 import org.maxim.core.helper.TimeHelper;
+import org.maxim.core.models.completion.QuestCompletionStatus;
 import org.maxim.core.models.quest.Quest;
+import org.maxim.example.implementations.DefaultRandomHelper;
 import org.maxim.example.implementations.DefaultSleepHelper;
 import org.maxim.example.implementations.DefaultStringHelper;
 import org.maxim.example.implementations.DefaultTimeHelper;
@@ -24,14 +30,91 @@ import org.maxim.example.implementations.HttpSession;
 import org.maxim.example.implementations.JacksonJson;
 import org.maxim.example.implementations.RotatingHeaderProvider;
 import org.maxim.extensions.filter.QuestFilter;
+import org.maxim.extensions.helper.QuestHelper;
 
 public class Main {
     public static final Encoder base64 = Base64.getEncoder();
     public static final SleepHelper sleeper = new DefaultSleepHelper();
     public static final StringHelper stringer = new DefaultStringHelper();
     public static final TimeHelper timer = new DefaultTimeHelper();
+    public static final RandomHelper rand = new DefaultRandomHelper();
     public static final HeaderProvider headerProvider = new RotatingHeaderProvider(
             Duration.ofMinutes(30), Main::getHeaders);
+
+    public static void main(String[] args) {
+        HttpSession session = new HttpSession("https://discord.com/api/v9", headerProvider);
+        List<Quest> quests = session.getQuests();
+        QuestFilter filter = new QuestFilter(timer);
+        QuestHelper helper = new QuestHelper();
+        QuestCompleterFactory factory = new QuestCompleterFactory(session);
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+
+        // Process all quests
+        for (Quest quest : quests) {
+            helper.setQuest(quest);
+            filter.setQuest(quest);
+
+            final String questName = helper.getQuestName();
+            final String questType = helper.getQuestType().name();
+
+            if (!QuestCompleterFactory.isSupported(helper.getQuestType())) {
+                System.out.println("Quest of type '%s' is not supported!".formatted(questType));
+                continue;
+            }
+
+            if (filter.isEnrollable()) {
+                System.out.println("[%d] Quest '%s' is enrollable!".formatted(quest.Id, questName));
+                continue;
+            }
+
+            if (filter.isClaimable() && filter.isWorthy()) {
+                System.out.println("Quest '%s' is claimable!".formatted(questName));
+            }
+
+            if (!filter.isCompleteable()) {
+                continue;
+            }
+
+            System.out.println("[%s] Completing '%s' quest for rewards: %s"
+                    .formatted(questType, questName, helper.getQuestRewards()));
+
+            try {
+                final Completer completer = factory.getCompleter(helper.getQuestType());
+
+                Future<?> worker = executor.submit(() -> completer.completeQuest(quest));
+                Future<?> monitor = executor.submit(() -> {
+                    while (true) {
+                        QuestCompletionStatus status = completer.currentStatus();
+
+                        System.out.print(stringer.format(
+                                "\r[%s] %s: %d/%d (%.1f%%)",
+                                questType, questName,
+                                status.done, status.total,
+                                status.getPercentage()));
+
+                        if (status.completed)
+                            break;
+
+                        sleeper.sleep(1);
+                    }
+                });
+
+                worker.get();
+                monitor.get();
+
+                System.out.println("\nQuest '%s' is completed!".formatted(questName));
+            } catch (InterruptedException | ExecutionException inter) {
+                System.out.println("InterruptedException: %s".formatted(inter.getMessage()));
+            }
+        }
+
+        try {
+            Files.writeString(Paths.get("naina.quests.json"), JacksonJson.parseObject(quests));
+        } catch (Exception e) {
+        }
+
+        executor.shutdown();
+    }
 
     public static String getFormat(Quest quest, QuestFilter filter) {
         StringBuilder sb = new StringBuilder();
@@ -44,30 +127,6 @@ public class Main {
         sb.append(filter.isWorthy() ? 1 : 0);
 
         return sb.toString();
-    }
-
-    public static void main(String[] args) {
-        HttpSession session = new HttpSession("https://discord.com/api/v9", headerProvider);
-        List<Quest> quests = session.getQuests();
-        List<String> output = new ArrayList<>();
-
-        // Sort by id
-        quests.sort(Comparator.comparingLong(q -> q.Id));
-
-        // Prints all quests
-        for (Quest quest : quests) {
-            output.add(getFormat(quest, new QuestFilter(timer, quest)));
-        }
-
-        String o = String.join("\n", output);
-        try {
-            Files.writeString(Paths.get("java.test.filter"), o);
-            Files.writeString(Paths.get("java.test.quests.json"), JacksonJson.parseObject(quests));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        System.out.println(o);
     }
 
     public static Map<String, String> getHeaders() {
