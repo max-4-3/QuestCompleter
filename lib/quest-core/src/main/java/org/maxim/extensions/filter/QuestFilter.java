@@ -39,7 +39,7 @@ public final class QuestFilter extends ExtensionHelper {
     }
 
     public boolean isClaimable() {
-        return isClaimable(this.quest, this.expired);
+        return isClaimable(this.quest, this.expired, this.timer);
     }
 
     public boolean isWorthy() {
@@ -61,22 +61,21 @@ public final class QuestFilter extends ExtensionHelper {
         return String.join("; ", strings);
     }
 
-    public static boolean isEnrollable(Quest quest, boolean isExpired) {
-        return isObjectNull(quest.userStatus) && !isExpired;
+    public static boolean isEnrollable(Quest quest, boolean expired) {
+        return isObjectNull(quest.userStatus) && !expired;
     }
 
-    public static boolean isCompleteable(Quest quest, boolean isExpired) {
-        if (quest.Id == EXCLUDED_Id || isObjectNull(quest.userStatus))
+    public static boolean isCompleteable(Quest quest, boolean expired) {
+        if (quest.Id == EXCLUDED_Id || isObjectNull(quest.userStatus) || expired)
             return false;
 
         QuestUserStatus status = quest.userStatus;
         return !isStringEmpty(status.enrolledAt) &&
-                isStringEmpty(status.completedAt) && // Not yet completed
-                !isExpired;
+                isStringEmpty(status.completedAt); // Not yet completed
     }
 
-    public static boolean isClaimable(Quest quest, boolean isExpired) {
-        if (isObjectNull(quest.userStatus) || isExpired)
+    public static boolean isClaimable(Quest quest, boolean expired, TimeHelper timer) {
+        if (isObjectNull(quest.userStatus) || expired)
             return false;
 
         QuestUserStatus status = quest.userStatus;
@@ -85,15 +84,15 @@ public final class QuestFilter extends ExtensionHelper {
         return !isStringEmpty(status.completedAt) &&
                 isStringEmpty(status.claimedAt) && // Not yet claimed
                 !isObjectNull(rewards) &&
-                !isExpired;
+                !isTimeExpired(rewards.rewardsExpireAt, timer);
     }
 
-    public static boolean isWorthy(Quest quest, boolean isExpired) {
-        if (isExpired || isObjectNull(quest.config.rewardsConfig))
+    public static boolean isWorthy(Quest quest, boolean expired) {
+        if (expired || isObjectNull(quest.config.rewardsConfig))
             return false;
 
         List<QuestReward> rewards = quest.config.rewardsConfig.rewards;
-        if (isArrayEmpty(rewards))
+        if (isListEmpty(rewards))
             return false;
 
         for (QuestReward reward : rewards) {
@@ -109,7 +108,11 @@ public final class QuestFilter extends ExtensionHelper {
     }
 
     public static boolean isSpecialReward(int rewardType) {
-        return isArrayContain(SPECIAL_REWARD_TYPES, rewardType);
+        for (int t : SPECIAL_REWARD_TYPES) {
+            if (t == rewardType)
+                return true;
+        }
+        return false;
     }
 
     public static boolean isTimeExpired(String timeStr, TimeHelper timer) {
