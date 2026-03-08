@@ -23,6 +23,9 @@ public final class QuestHelper extends ExtensionHelper {
     private Quest quest;
     private QuestType questType;
 
+    public QuestHelper() {
+    }
+
     public QuestHelper(Quest quest) {
         this.setQuest(quest);
     }
@@ -71,7 +74,7 @@ public final class QuestHelper extends ExtensionHelper {
                 t.target = e.getValue().target;
                 t.externalIds = e.getValue().externalIds;
                 tasks.put(e.getKey(), t);
-            } 
+            }
 
             config.joinOperator = quest.config.taskConfig.joinOperator;
             config.enrollmentUrl = quest.config.taskConfig.enrollmentUrl;
@@ -84,7 +87,7 @@ public final class QuestHelper extends ExtensionHelper {
                 t.externalIds = e.getValue().externalIds;
 
                 tasks.put(e.getKey(), t);
-            } 
+            }
 
             config.joinOperator = quest.config.taskConfigV2.joinOperator;
             config.enrollmentUrl = quest.config.taskConfigV2.enrollmentUrl;

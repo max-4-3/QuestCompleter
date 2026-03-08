@@ -20,6 +20,10 @@ public final class QuestFilter extends ExtensionHelper {
     private Quest quest;
     private boolean expired;
 
+    public QuestFilter(TimeHelper timer) {
+        this.timer = timer;
+    }
+
     public QuestFilter(TimeHelper timer, Quest quest) {
         this.timer = timer;
         this.setQuest(quest);
