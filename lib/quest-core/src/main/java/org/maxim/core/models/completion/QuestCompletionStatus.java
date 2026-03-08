@@ -3,11 +3,12 @@ package org.maxim.core.models.completion;
 import org.maxim.core.models.quest.types.QuestType;
 
 public class QuestCompletionStatus {
-    public QuestType type = QuestType.Unknown;
-    public long done = 0;
-    public long total = 0;
+    public volatile QuestType type = QuestType.Unknown;
+    public volatile long done = 0;
+    public volatile long total = 0;
+    public volatile boolean completed = false;
 
-    public float getPercentage() {
-        return total > 0 ? done / total : 0.0f;
+    public double getPercentage() {
+        return total > 0 ? ((double) done / total) * 100.0f : 0.0f;
     }
 }

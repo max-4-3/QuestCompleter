@@ -99,17 +99,34 @@ public final class QuestHelper extends ExtensionHelper {
     }
 
     public static String getQuestName(Quest quest, QuestType questType) {
+        String defaultName = "A wild quest appeared!";
+        String name = defaultName;
+
         if (!isObjectNull(questType) && questType == QuestType.Watch) {
             if (!isObjectNull(quest.config.videoMetadata)) {
                 if (!isObjectNull(quest.config.videoMetadata.messages)
                         && !isStringEmpty(quest.config.videoMetadata.messages.videoTitle)) {
-                    return quest.config.videoMetadata.messages.videoTitle;
+                    name = quest.config.videoMetadata.messages.videoTitle;
                 }
-            } else if (!isObjectNull(quest.config.application) && !isStringEmpty(quest.config.application.name)) {
-                return String.format("Watch video by %s", title(quest.config.application.name));
             }
         }
-        return quest.config.messages.questName;
+
+        if (name.equals(defaultName) && !isObjectNull(quest.config.messages)) {
+            if (!isStringEmpty(quest.config.messages.questName)) {
+                name = quest.config.messages.questName;
+            } else if (!isStringEmpty(quest.config.messages.gameTitle)) {
+                name = quest.config.messages.gameTitle;
+            } else if (!isStringEmpty(quest.config.messages.gamePublisher)) {
+                name = String.format("Quest by %s ", quest.config.messages.gamePublisher);
+            }
+        }
+
+        if (name.equals(defaultName) && !isObjectNull(quest.config.application)
+                && !isStringEmpty(quest.config.application.name)) {
+            name = String.format("wild qust by %s", quest.config.application.name);
+        }
+
+        return title(name);
     }
 
     public static Set<String> getQuestRewards(Quest quest) {

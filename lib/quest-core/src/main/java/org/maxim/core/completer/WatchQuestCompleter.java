@@ -87,6 +87,7 @@ public class WatchQuestCompleter implements Completer {
     }
 
     private void finish() {
+        this.status.completed = true;
         this.result.completed = this.status.done >= this.status.total;
         if (this.result.completed) {
             this.status.done = this.status.total;
@@ -99,6 +100,7 @@ public class WatchQuestCompleter implements Completer {
 
         this.status.total = progress.total;
         this.status.done = progress.done;
+        this.status.completed = false;
         this.result.completed = false;
     }
 }
