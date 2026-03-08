@@ -1,8 +1,8 @@
 package org.maxim.core.completer;
 
-import org.maxim.core.models.quest.Quest;
 import org.maxim.core.models.completion.QuestCompletionResult;
 import org.maxim.core.models.completion.QuestCompletionStatus;
+import org.maxim.core.models.quest.Quest;
 
 public interface Completer {
 

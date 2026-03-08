@@ -1,14 +1,15 @@
 package org.maxim.core.models.quest;
 
-import org.jetbrains.annotations.Nullable;
 import java.util.Map;
-import org.maxim.core.models.quest.datatypes.Snowflake;
+
+import org.jetbrains.annotations.Nullable;
+import org.maxim.core.models.quest.userstatus.task.QuestUserTaskProgress;
 
 public class QuestUserStatus {
-    public Snowflake userID;
+    public Long userId;
 
     @Nullable
-    public Snowflake questID;
+    public Long questId;
     @Nullable
     public String enrolledAt;
     @Nullable
@@ -18,9 +19,11 @@ public class QuestUserStatus {
     @Nullable
     public Integer claimedTier;
 
+    @Nullable
     public String lastStreamHeartbeatAt;
-    public String streamProgressSeconds;
+
+    public Integer streamProgressSeconds;
     public Integer dismissedQuestContent;
-    public Map<String, QuestTaskProgress> progress;
+    public Map<String, QuestUserTaskProgress> progress;
 
 }

@@ -7,13 +7,13 @@ import org.maxim.core.helper.RandomHelper;
 import org.maxim.core.helper.SleepHelper;
 import org.maxim.core.helper.StringHelper;
 import org.maxim.core.helper.TimeHelper;
-import org.maxim.core.session.Session;
-
-import org.maxim.core.models.quest.Quest;
-import org.maxim.core.models.response.JsonObject;
-import org.maxim.core.models.quest.datatypes.QuestProgress;
 import org.maxim.core.models.completion.QuestCompletionResult;
 import org.maxim.core.models.completion.QuestCompletionStatus;
+import org.maxim.core.models.quest.Quest;
+import org.maxim.core.models.quest.datatypes.QuestProgress;
+import org.maxim.core.models.response.JsonObject;
+import org.maxim.core.session.Session;
+import org.maxim.extensions.helper.QuestHelper;
 
 public class WatchQuestCompleter implements Completer {
     private final StringHelper stringHelper;
@@ -24,6 +24,7 @@ public class WatchQuestCompleter implements Completer {
 
     private final QuestCompletionResult result;
     private final QuestCompletionStatus status;
+    private QuestHelper questHelper;
 
     public WatchQuestCompleter(
             SleepHelper sleepHelper,
@@ -43,11 +44,12 @@ public class WatchQuestCompleter implements Completer {
     }
 
     public QuestCompletionResult completeQuest(Quest quest) {
+        this.questHelper = new QuestHelper(quest);
         this.init(quest);
 
         long maxFuture = 10, speed = 7, interval = 1;
         long maxAllowed, diffrence, next;
-        String endpoint = stringHelper.format("quests/%d/video-progress", quest.id.toLong());
+        String endpoint = stringHelper.format("quests/%d/video-progress", quest.Id);
 
         while (!result.completed && status.done < status.total) {
             maxAllowed = timeHelper.timeDiffNow(quest.userStatus.enrolledAt).plusSeconds(maxFuture).getSeconds();
@@ -92,8 +94,8 @@ public class WatchQuestCompleter implements Completer {
     }
 
     private void init(Quest quest) {
-        this.status.type = quest.getQuestType();
-        QuestProgress progress = quest.getQuestProgress();
+        this.status.type = this.questHelper.getQuestType();
+        QuestProgress progress = this.questHelper.getQuestProgress();
 
         this.status.total = progress.total;
         this.status.done = progress.done;

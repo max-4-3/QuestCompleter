@@ -7,14 +7,13 @@ import java.util.function.Function;
 import org.maxim.core.helper.RandomHelper;
 import org.maxim.core.helper.SleepHelper;
 import org.maxim.core.helper.StringHelper;
-import org.maxim.core.session.Session;
-
-import org.maxim.core.models.quest.Quest;
-import org.maxim.core.models.response.JsonObject;
-import org.maxim.core.models.quest.datatypes.QuestProgress;
-import org.maxim.core.models.quest.datatypes.Snowflake;
 import org.maxim.core.models.completion.QuestCompletionResult;
 import org.maxim.core.models.completion.QuestCompletionStatus;
+import org.maxim.core.models.quest.Quest;
+import org.maxim.core.models.quest.datatypes.QuestProgress;
+import org.maxim.core.models.response.JsonObject;
+import org.maxim.core.session.Session;
+import org.maxim.extensions.helper.QuestHelper;
 
 public class PlayQuestCompleter implements Completer {
     private final StringHelper stringHelper;
@@ -23,6 +22,8 @@ public class PlayQuestCompleter implements Completer {
     private final Session session;
     private final QuestCompletionResult result;
     private final QuestCompletionStatus status;
+
+    private QuestHelper questHelper;
 
     public PlayQuestCompleter(
             SleepHelper sleepHelper,
@@ -34,17 +35,18 @@ public class PlayQuestCompleter implements Completer {
         this.stringHelper = stringHelper;
         this.sleepHelper = sleepHelper;
         this.session = session;
-
         this.result = new QuestCompletionResult();
         this.status = new QuestCompletionStatus();
     }
 
     public QuestCompletionResult completeQuest(Quest quest) {
+        this.questHelper = new QuestHelper(quest);
+
         this.init(quest);
-        Snowflake applicationId = quest.id;
+        Long applicationId = quest.Id;
 
         long interval; // [55, 70]
-        String endpoint = stringHelper.format("quests/%d/heartbeat", applicationId.toLong());
+        String endpoint = stringHelper.format("quests/%d/heartbeat", applicationId);
 
         Function<JsonObject, Float> parseResponse = (JsonObject response) -> {
             if (quest.config.configVersion != null && quest.config.configVersion == 1) {
@@ -82,10 +84,10 @@ public class PlayQuestCompleter implements Completer {
         return this.status;
     }
 
-    private JsonObject makeRequest(String endpoint, Snowflake applicationId) {
+    private JsonObject makeRequest(String endpoint, Long applicationId) {
         Map<String, Object> body = new HashMap<>();
         body.put("terminal", false);
-        body.put("application_id", applicationId.toLong());
+        body.put("application_id", applicationId);
 
         return this.session.post(endpoint, body);
     }
@@ -98,8 +100,8 @@ public class PlayQuestCompleter implements Completer {
     }
 
     private void init(Quest quest) {
-        this.status.type = quest.getQuestType();
-        QuestProgress progress = quest.getQuestProgress();
+        this.status.type = this.questHelper.getQuestType();
+        QuestProgress progress = this.questHelper.getQuestProgress();
 
         this.status.total = progress.total;
         this.status.done = progress.done;
