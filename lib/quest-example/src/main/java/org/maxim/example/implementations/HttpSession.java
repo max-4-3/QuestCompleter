@@ -1,16 +1,20 @@
 package org.maxim.example.implementations;
 
-import org.maxim.core.models.quest.Quest;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.maxim.core.helper.StringHelper;
+import org.maxim.core.models.quest.Quest;
 import org.maxim.core.session.Session;
 
 import tools.jackson.databind.JsonNode;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class HttpSession implements Session {
     private final StringHelper stringHelper = new DefaultStringHelper();
@@ -31,7 +35,11 @@ public class HttpSession implements Session {
                     .build();
 
             HttpResponse<String> resp = client.send(req, HttpResponse.BodyHandlers.ofString());
-            return JacksonJson.parse(resp.body());
+            String response = resp.body();
+
+            Files.write(Paths.get(path.replace('/', '-')), response.getBytes());
+
+            return JacksonJson.parse(response);
 
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
@@ -71,10 +79,12 @@ public class HttpSession implements Session {
     public List<Quest> getQuests() {
         try {
             JacksonJson response = this.get("quests/@me");
+
             JacksonJson blocked = response.get("quest_enrollment_blocked_until");
             if (!blocked.isEmptyOrNull()) {
                 throw new RuntimeException(
-                        stringHelper.format("ERROR: Blocked for quests: %s", blocked.<String>convert()));
+                        stringHelper.format("ERROR: Blocked for quests: %s",
+                                blocked.<String>convert()));
             }
 
             List<Quest> quests = new ArrayList<>();
