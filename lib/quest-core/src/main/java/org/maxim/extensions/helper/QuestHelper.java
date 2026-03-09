@@ -60,12 +60,12 @@ public final class QuestHelper extends ExtensionHelper {
                 progress.total, this.getQuestRewards(), progress.taskName);
     }
 
-    public static QuestBaseTaskConfig getTaskConfig(Quest quest) {
+    public static QuestBaseTaskConfig<QuestTaskBase> getTaskConfig(Quest quest) {
         if (quest.config.taskConfig == null || quest.config.taskConfigV2 == null) {
             return null;
         }
 
-        QuestBaseTaskConfig config = new QuestBaseTaskConfig();
+        QuestBaseTaskConfig<QuestTaskBase> config = new QuestBaseTaskConfig<QuestTaskBase>();
         Map<String, QuestTaskBase> tasks = new HashMap<>();
 
         if (quest.config.taskConfig != null) {
@@ -150,7 +150,7 @@ public final class QuestHelper extends ExtensionHelper {
     }
 
     public static QuestType getQuestType(Quest quest) {
-        QuestBaseTaskConfig taskConfig = getTaskConfig(quest);
+        QuestBaseTaskConfig<QuestTaskBase> taskConfig = getTaskConfig(quest);
         if (isObjectNull(taskConfig) || isMapEmpty(taskConfig.tasks)) {
             System.out.println("taskConfig(.tasks) is null");
             return QuestType.Unknown;
@@ -179,7 +179,7 @@ public final class QuestHelper extends ExtensionHelper {
     }
 
     public static QuestProgress getQuestProgress(Quest quest) {
-        QuestBaseTaskConfig taskConfig = getTaskConfig(quest);
+        QuestBaseTaskConfig<QuestTaskBase> taskConfig = getTaskConfig(quest);
         if (isObjectNull(taskConfig))
             return null;
 
