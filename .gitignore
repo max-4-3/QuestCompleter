@@ -57,3 +57,7 @@ gradle-app.setting
 
 # Dont' track
 dont-track/
+
+# Uff
+.settings/
+test.*

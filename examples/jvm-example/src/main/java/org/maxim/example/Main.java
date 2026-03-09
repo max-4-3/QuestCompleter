@@ -107,7 +107,7 @@ public class Main {
         }
 
         try {
-            Files.writeString(Paths.get("naina.quests.json"), JacksonJson.parseObject(quests));
+            Files.writeString(Paths.get("test.<name>.quests.json"), JacksonJson.parseObject(quests));
         } catch (Exception e) {
         }
 
