@@ -1,4 +1,4 @@
 rootProject.name = 'QuestCompleter'
 
 include ':lib:quest-core'
-include ':lib:quest-example'
+include ':examples:jvm-example'
