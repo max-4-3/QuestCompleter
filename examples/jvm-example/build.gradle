@@ -2,6 +2,10 @@ plugins {
     id 'application'
 }
 
+repositories {
+    mavenCentral()
+}
+
 application {
     mainClass = "org.maxim.example.Main"
 }
