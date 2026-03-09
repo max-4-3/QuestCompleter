@@ -14,12 +14,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.maxim.core.completer.Completer;
+import org.maxim.extensions.completer.Completer;
+import org.maxim.extensions.completer.status.CompletionStatus;
 import org.maxim.core.helper.RandomHelper;
 import org.maxim.core.helper.SleepHelper;
 import org.maxim.core.helper.StringHelper;
 import org.maxim.core.helper.TimeHelper;
-import org.maxim.core.models.completion.QuestCompletionStatus;
 import org.maxim.core.models.quest.Quest;
 import org.maxim.example.implementations.DefaultRandomHelper;
 import org.maxim.example.implementations.DefaultSleepHelper;
@@ -79,30 +79,28 @@ public class Main {
                     .formatted(questType, questName, helper.getQuestRewards()));
 
             try {
-                final Completer completer = factory.getCompleter(helper.getQuestType());
+                final Completer completer = factory.getCompleter(quest, helper.getQuestType());
 
-                Future<?> worker = executor.submit(() -> completer.completeQuest(quest));
+                Future<?> worker = executor.submit(() -> completer.completeQuest());
                 Future<?> monitor = executor.submit(() -> {
-                    while (true) {
-                        QuestCompletionStatus status = completer.currentStatus();
+                    CompletionStatus status = completer.currentStatus();
 
+                    do {
+                        status = completer.currentStatus();
                         System.out.print(stringer.format(
                                 "\r[%s] %s: %d/%d (%.1f%%)",
                                 questType, questName,
                                 status.done, status.total,
                                 status.getPercentage()));
 
-                        if (status.completed)
-                            break;
-
                         sleeper.sleep(1);
-                    }
+                    } while (!status.completed);
+
+                    System.out.println("Quest '%s' is completed!".formatted(questName));
                 });
 
                 worker.get();
                 monitor.get();
-
-                System.out.println("\nQuest '%s' is completed!".formatted(questName));
             } catch (InterruptedException | ExecutionException inter) {
                 System.out.println("InterruptedException: %s".formatted(inter.getMessage()));
             }

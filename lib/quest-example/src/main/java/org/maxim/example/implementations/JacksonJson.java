@@ -1,6 +1,7 @@
 package org.maxim.example.implementations;
 
-import org.maxim.core.models.response.JsonObject;
+import org.maxim.extensions.completer.session.response.JsonResponse;
+
 import tools.jackson.core.json.JsonReadFeature;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
@@ -9,7 +10,7 @@ import tools.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 
-public class JacksonJson implements JsonObject {
+public class JacksonJson implements JsonResponse {
     // Jackson mapper that is pretty good
     // it can read: some_field as someField (useful in naming property in classes)
     // it only access public fields

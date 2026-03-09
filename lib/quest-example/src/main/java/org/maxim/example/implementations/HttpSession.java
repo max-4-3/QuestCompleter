@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.maxim.core.helper.StringHelper;
 import org.maxim.core.models.quest.Quest;
-import org.maxim.core.session.Session;
+import org.maxim.extensions.completer.session.Session;
 
 import tools.jackson.databind.JsonNode;
 
@@ -78,9 +78,9 @@ public class HttpSession implements Session {
 
             JacksonJson blocked = response.get("quest_enrollment_blocked_until");
             if (!blocked.isEmptyOrNull()) {
-                throw new RuntimeException(
-                        stringHelper.format("ERROR: Blocked for quests: %s",
-                                blocked.<String>convert()));
+            throw new RuntimeException(
+            stringHelper.format("ERROR: Blocked for quests: %s",
+            blocked.<String>convert()));
             }
 
             List<Quest> quests = new ArrayList<>();
