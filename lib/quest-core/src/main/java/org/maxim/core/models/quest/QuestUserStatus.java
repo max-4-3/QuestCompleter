@@ -2,7 +2,7 @@ package org.maxim.core.models.quest;
 
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
+import org.maxim.core.models.quest.config.Nullable;
 import org.maxim.core.models.quest.userstatus.task.QuestUserTaskProgress;
 
 public class QuestUserStatus {

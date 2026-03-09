@@ -2,7 +2,7 @@ package org.maxim.core.models.quest;
 
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
+import org.maxim.core.models.quest.config.Nullable;
 import org.maxim.core.models.quest.config.QuestAssets;
 import org.maxim.core.models.quest.config.QuestGradient;
 import org.maxim.core.models.quest.config.QuestMessages;
