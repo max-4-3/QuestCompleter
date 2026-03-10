@@ -91,9 +91,9 @@ public class PlayQuestCompleter implements Completer {
 
     private double parseResponse(JsonResponse response) {
         if (this.quest.config != null && quest.config.configVersion == 1) {
-            return (double) response.get("streamProgressSeconds").convert();
+            return response.get("streamProgressSeconds").as().d64();
         } else {
-            return (double) response.get("progress").get("PLAY_ON_DESKTOP").get("value").convert();
+            return response.get("progress").get("PLAY_ON_DESKTOP").get("value").as().d64();
         }
     }
 

@@ -78,9 +78,9 @@ public class HttpSession implements Session {
 
             JacksonJson blocked = response.get("quest_enrollment_blocked_until");
             if (!blocked.isEmptyOrNull()) {
-            throw new RuntimeException(
-            stringHelper.format("ERROR: Blocked for quests: %s",
-            blocked.<String>convert()));
+                throw new RuntimeException(
+                        stringHelper.format("ERROR: Blocked for quests: %s",
+                                blocked.as().text()));
             }
 
             List<Quest> quests = new ArrayList<>();

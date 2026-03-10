@@ -39,13 +39,8 @@ public class JacksonJson implements JsonResponse {
         return new JacksonJson(child);
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T convert() {
-        try {
-            return MAPPER.treeToValue(node, (Class<T>) Object.class);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public JacksonJSONMapper as() {
+        return new JacksonJSONMapper(this.node);
     }
 
     public boolean isEmptyOrNull() {

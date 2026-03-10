@@ -72,6 +72,7 @@ public class Main {
             }
 
             if (!filter.isCompleteable()) {
+                System.out.println("Quest '%s' is not completeable!".formatted(questName));
                 continue;
             }
 
