@@ -16,10 +16,10 @@ import java.util.concurrent.Future;
 
 import org.maxim.extensions.completer.Completer;
 import org.maxim.extensions.completer.status.CompletionStatus;
-import org.maxim.core.helper.RandomHelper;
-import org.maxim.core.helper.SleepHelper;
-import org.maxim.core.helper.StringHelper;
-import org.maxim.core.helper.TimeHelper;
+import org.maxim.extensions.helper.RandomHelper;
+import org.maxim.extensions.helper.SleepHelper;
+import org.maxim.extensions.helper.StringHelper;
+import org.maxim.extensions.helper.TimeHelper;
 import org.maxim.core.models.quest.Quest;
 import org.maxim.example.implementations.DefaultRandomHelper;
 import org.maxim.example.implementations.DefaultSleepHelper;
@@ -71,8 +71,7 @@ public class Main {
                 System.out.println("Quest '%s' is claimable!".formatted(questName));
             }
 
-            if (!filter.isCompleteable()) {
-                System.out.println("Quest '%s' is not completeable!".formatted(questName));
+            if (!filter.isCompletable()) {
                 continue;
             }
 
@@ -120,7 +119,7 @@ public class Main {
         sb.append(quest.Id.toString());
         sb.append('|');
         sb.append(filter.isExpired() ? 1 : 0);
-        sb.append(filter.isCompleteable() ? 1 : 0);
+        sb.append(filter.isCompletable() ? 1 : 0);
         sb.append(filter.isEnrollable() ? 1 : 0);
         sb.append(filter.isClaimable() ? 1 : 0);
         sb.append(filter.isWorthy() ? 1 : 0);

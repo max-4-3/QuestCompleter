@@ -2,8 +2,8 @@ package org.maxim.core.models.quest;
 
 import org.maxim.core.models.quest.config.Nullable;
 
-/*  
- *  if error using jetbrains annotations:
+/**
+ *  if error using JetBrains annotations:
  *      @interface Nullable {}
  * */
 

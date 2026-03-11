@@ -3,8 +3,8 @@ package org.maxim.extensions.filter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.maxim.core.helper.StringHelper;
-import org.maxim.core.helper.TimeHelper;
+import org.maxim.extensions.helper.StringHelper;
+import org.maxim.extensions.helper.TimeHelper;
 import org.maxim.core.models.quest.Quest;
 import org.maxim.core.models.quest.QuestUserStatus;
 import org.maxim.core.models.quest.config.reward.QuestReward;
@@ -38,8 +38,8 @@ public final class QuestFilter extends ExtensionHelper {
         return isEnrollable(this.quest, this.expired);
     }
 
-    public boolean isCompleteable() {
-        return isCompleteable(this.quest, this.expired);
+    public boolean isCompletable() {
+        return isCompletable(this.quest, this.expired);
     }
 
     public boolean isClaimable() {
@@ -54,10 +54,10 @@ public final class QuestFilter extends ExtensionHelper {
         return this.expired;
     }
 
-    public String getPreety(StringHelper strHelper) {
+    public String getPretty(StringHelper strHelper) {
         List<String> strings = new ArrayList<>();
         strings.add(strHelper.format("isEnrollable: %s", this.isEnrollable()));
-        strings.add(strHelper.format("isCompleteable: %s", this.isCompleteable()));
+        strings.add(strHelper.format("isCompletable: %s", this.isCompletable()));
         strings.add(strHelper.format("isClaimable: %s", this.isClaimable()));
         strings.add(strHelper.format("isWorthy: %s", this.isWorthy()));
         strings.add(strHelper.format("isExpired: %s", this.isExpired()));
@@ -69,7 +69,7 @@ public final class QuestFilter extends ExtensionHelper {
         return isObjectNull(quest.userStatus) && !expired;
     }
 
-    public static boolean isCompleteable(Quest quest, boolean expired) {
+    public static boolean isCompletable(Quest quest, boolean expired) {
         if (quest.Id == EXCLUDED_Id || isObjectNull(quest.userStatus) || expired)
             return false;
 

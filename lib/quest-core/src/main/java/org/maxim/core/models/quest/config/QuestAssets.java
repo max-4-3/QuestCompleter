@@ -10,6 +10,7 @@ public class QuestAssets {
     public String gameTileLight;
     public String logotypeDark;
     public String logotypeLight;
+    @SuppressWarnings("SpellCheckingInspection")
     public String questBarHeroBlurhash;
 
     @Nullable

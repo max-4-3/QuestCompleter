@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.maxim.core.helper.StringHelper;
 import org.maxim.core.models.quest.Quest;
 import org.maxim.core.models.quest.config.reward.QuestReward;
 import org.maxim.core.models.quest.config.task.QuestTask;
@@ -51,7 +50,7 @@ public final class QuestHelper extends ExtensionHelper {
         return this.questType;
     }
 
-    public String getPreety(StringHelper strHelper) {
+    public String getPretty(StringHelper strHelper) {
         QuestProgress progress = this.getQuestProgress();
         if (progress == null) {
             progress = new QuestProgress("Unknown", 0, 0);
@@ -65,9 +64,10 @@ public final class QuestHelper extends ExtensionHelper {
             return null;
         }
 
-        QuestBaseTaskConfig<QuestTaskBase> config = new QuestBaseTaskConfig<QuestTaskBase>();
+        QuestBaseTaskConfig<QuestTaskBase> config = new QuestBaseTaskConfig<>();
         Map<String, QuestTaskBase> tasks = new HashMap<>();
 
+        //noinspection ConstantValue
         if (quest.config.taskConfig != null) {
             for (Entry<String, QuestTask> e : quest.config.taskConfig.tasks.entrySet()) {
                 QuestTaskBase t = new QuestTaskBase();
@@ -123,7 +123,7 @@ public final class QuestHelper extends ExtensionHelper {
 
         if (name.equals(defaultName) && !isObjectNull(quest.config.application)
                 && !isStringEmpty(quest.config.application.name)) {
-            name = String.format("wild qust by %s", quest.config.application.name);
+            name = String.format("Wild quest by %s", quest.config.application.name);
         }
 
         return title(name);

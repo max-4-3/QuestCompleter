@@ -2,7 +2,7 @@ package org.maxim.example.implementations;
 
 import java.util.Locale;
 
-import org.maxim.core.helper.StringHelper;
+import org.maxim.extensions.helper.StringHelper;
 
 public class DefaultStringHelper implements StringHelper {
 

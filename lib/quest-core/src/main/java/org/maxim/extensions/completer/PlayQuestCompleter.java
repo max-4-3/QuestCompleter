@@ -3,9 +3,9 @@ package org.maxim.extensions.completer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.maxim.core.helper.RandomHelper;
-import org.maxim.core.helper.SleepHelper;
-import org.maxim.core.helper.StringHelper;
+import org.maxim.extensions.helper.RandomHelper;
+import org.maxim.extensions.helper.SleepHelper;
+import org.maxim.extensions.helper.StringHelper;
 import org.maxim.core.models.quest.Quest;
 import org.maxim.core.models.quest.datatypes.QuestProgress;
 import org.maxim.extensions.completer.result.CompletionResult;
@@ -52,7 +52,7 @@ public class PlayQuestCompleter implements Completer {
             JsonResponse response = makeRequest(endpoint, applicationId);
 
             status.done = (long) Math.floor(parseResponse(response));
-            status.completed = !response.get("completed_at").isEmptyOrNull();
+            status.completed = response.get("completed_at").isNotEmpty();
 
             // Change interval randomly
             if (status.done > status.total * 0.8) {

@@ -1,6 +1,6 @@
 package org.maxim.example.implementations;
 
-import org.maxim.core.helper.RandomHelper;
+import org.maxim.extensions.helper.RandomHelper;
 import java.util.random.RandomGenerator;
 
 public class DefaultRandomHelper implements RandomHelper {

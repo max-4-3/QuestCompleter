@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-import org.maxim.core.helper.TimeHelper;
+import org.maxim.extensions.helper.TimeHelper;
 
 public class DefaultTimeHelper implements TimeHelper {
 

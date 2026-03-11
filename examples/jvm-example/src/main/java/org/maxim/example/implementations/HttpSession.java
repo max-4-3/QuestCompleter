@@ -8,7 +8,7 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.maxim.core.helper.StringHelper;
+import org.maxim.extensions.helper.StringHelper;
 import org.maxim.core.models.quest.Quest;
 import org.maxim.extensions.completer.session.Session;
 
@@ -77,7 +77,7 @@ public class HttpSession implements Session {
             JacksonJson response = this.get("quests/@me");
 
             JacksonJson blocked = response.get("quest_enrollment_blocked_until");
-            if (!blocked.isEmptyOrNull()) {
+            if (blocked.isNotEmpty()) {
                 throw new RuntimeException(
                         stringHelper.format("ERROR: Blocked for quests: %s",
                                 blocked.as().text()));

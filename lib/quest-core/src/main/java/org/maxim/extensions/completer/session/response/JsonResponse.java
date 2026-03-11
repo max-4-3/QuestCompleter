@@ -1,9 +1,9 @@
 package org.maxim.extensions.completer.session.response;
 
 public interface JsonResponse {
-    public JsonResponse get(String key);
+    JsonResponse get(String key);
 
-    public JsonConversionMapper as();
+    JsonConversionMapper as();
 
-    public boolean isEmptyOrNull();
+    boolean isNotEmpty();
 }

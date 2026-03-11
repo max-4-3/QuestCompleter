@@ -1,7 +1,7 @@
 package org.maxim.core;
 
 public class Library {
-    public String getGretting() {
+    public String getGreeting() {
         return "Hello, from Library!";
     }
 }

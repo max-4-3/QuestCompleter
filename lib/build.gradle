@@ -8,10 +8,12 @@ allprojects {
 }
 
 subprojects {
-    plugins.withType(JavaPlugin) {
-        java {
-            toolchain {
-                languageVersion = JavaLanguageVersion.of(21)
+    plugins.withType(JavaPlugin).tap {
+        configureEach {
+            java {
+                toolchain {
+                    languageVersion = JavaLanguageVersion.of(21)
+                }
             }
         }
     }

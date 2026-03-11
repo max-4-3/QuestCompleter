@@ -3,10 +3,10 @@ package org.maxim.extensions.completer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.maxim.core.helper.RandomHelper;
-import org.maxim.core.helper.SleepHelper;
-import org.maxim.core.helper.StringHelper;
-import org.maxim.core.helper.TimeHelper;
+import org.maxim.extensions.helper.RandomHelper;
+import org.maxim.extensions.helper.SleepHelper;
+import org.maxim.extensions.helper.StringHelper;
+import org.maxim.extensions.helper.TimeHelper;
 import org.maxim.core.models.quest.Quest;
 import org.maxim.core.models.quest.datatypes.QuestProgress;
 import org.maxim.extensions.completer.result.CompletionResult;
@@ -50,18 +50,18 @@ public class WatchQuestCompleter implements Completer {
         String endpoint = stringer.format("quests/%d/video-progress", quest.Id);
 
         long maxFuture = 10, speed = 7, interval = 1;
-        long maxAllowed, diffrence, next;
+        long maxAllowed, difference, next;
 
         while (!status.completed && status.done < status.total) {
             maxAllowed = timer.timeDiffNow(quest.userStatus.enrolledAt).plusSeconds(maxFuture).getSeconds();
-            diffrence = maxAllowed - status.done;
+            difference = maxAllowed - status.done;
             next = status.done + speed;
 
-            if (diffrence >= speed) {
+            if (difference >= speed) {
                 JsonResponse response = this.makeRequest(endpoint,
                         Math.min(status.total, (double) next + this.rand.random()));
 
-                status.completed = !response.get("completed_at").isEmptyOrNull();
+                status.completed = response.get("completed_at").isNotEmpty();
                 status.done = Math.min(status.total, next);
             }
 

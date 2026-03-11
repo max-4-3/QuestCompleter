@@ -32,7 +32,7 @@ public class ExtensionHelper {
         return String.join(" ", sb);
     }
 
-    /* Checks whether a item ( not array ) is in array */
+    /* Checks whether an item ( not array ) is in array */
     public static boolean isArrayContain(Object array, Object item) {
         if (isObjectNull(array) || isObjectNull(item))
             return false;

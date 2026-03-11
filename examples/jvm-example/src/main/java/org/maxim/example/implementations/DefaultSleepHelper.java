@@ -1,6 +1,6 @@
 package org.maxim.example.implementations;
 
-import org.maxim.core.helper.SleepHelper;
+import org.maxim.extensions.helper.SleepHelper;
 import java.util.concurrent.TimeUnit;
 
 public class DefaultSleepHelper implements SleepHelper {

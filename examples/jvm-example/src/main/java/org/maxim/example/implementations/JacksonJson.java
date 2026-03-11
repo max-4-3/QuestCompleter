@@ -43,8 +43,8 @@ public class JacksonJson implements JsonResponse {
         return new JacksonJSONMapper(this.node);
     }
 
-    public boolean isEmptyOrNull() {
-        return node == null || node.isNull() || node.isEmpty();
+    public boolean isNotEmpty() {
+        return node != null && !node.isNull() && !node.isEmpty();
     }
     /* Implementations ends */
 

@@ -4,10 +4,13 @@ import org.maxim.extensions.completer.session.Session;
 import org.maxim.extensions.completer.Completer;
 import org.maxim.extensions.completer.PlayQuestCompleter;
 import org.maxim.extensions.completer.WatchQuestCompleter;
-import org.maxim.core.helper.*;
 import org.maxim.core.models.quest.Quest;
 import org.maxim.core.models.quest.types.QuestType;
 import org.maxim.example.implementations.*;
+import org.maxim.extensions.helper.RandomHelper;
+import org.maxim.extensions.helper.SleepHelper;
+import org.maxim.extensions.helper.StringHelper;
+import org.maxim.extensions.helper.TimeHelper;
 
 public final class QuestCompleterFactory {
     private final static TimeHelper timer = new DefaultTimeHelper();
